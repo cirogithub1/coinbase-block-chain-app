@@ -1,0 +1,37 @@
+Build Coinbase Blockchain Web 3.0 App with Next.js | Sanity.io | thirdweb
+	- https://youtu.be/frCsGK4cKks
+	- repository: https://github.com/davidrakosi/coinbase-clone
+
+	BackPack Wallet: bACKpACK-10
+	harbor warrior album brush address often prison toward meadow net account friend
+
+	02:00 npx create-next-app -e with-tailwindcss my-app
+	04:00 cd my-app/, installing Sanity.io
+	09:00 build schema
+	11:00 cd red-crow/, npm run dev
+	14:55 npm i @sanity/client 
+	16:00 set up client
+	16:25 npm run build for deply the client in sanity
+	17:00 code to clone: https://drive.google.com/drive/folders/1K2F71CTBYIlF4zMw9EMz5P231TQ80_x1
+
+	19:24 setup Metamask to: show test networks
+
+	21:00 thirdweb create new project
+				each project is a coinbase token 
+				add a token to each project
+				import those tokens from Metamask to thirdweb
+
+	27:54 mark
+
+	30:00 npm i @thirdweb-dev/react @thirdweb-dev/sdk ethers @3rdweb/hooks
+	31:00 wrapping WebProvider
+	32:30 npm i styled-components //I prefer tailwindcss
+	01:25:00 npm install --save chart.js react-chartjs-2
+	01:39:57 write a query in sanity vision/desktop
+
+	01:49:21 npm install ethers @3rdweb/sdk
+
+	02:07:00 npm i --save-dev @types/react-modal
+
+	03:13:23 npm i @sanity/image-url
+
