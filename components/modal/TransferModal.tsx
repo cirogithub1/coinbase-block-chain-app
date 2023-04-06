@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Transfer from './Transfer'
+import CoinSelector from './CoinSelector'
 
 const TransferModal = ({ 
 	sanityTokens, 
@@ -14,14 +15,19 @@ const TransferModal = ({
 				return <Transfer 
 					selectedToken={selectedToken} 
 					setAction={setAction}
-					thirdwebTokens={thirdwebTokens}
 					walletAddress={walletAddress}/>
 			case "receive":
 				return <h2>Receive</h2>
-			case "transfered":
-				return <h2>transfered</h2>
+			case "select":
+				return <CoinSelector 
+					setAction = {setAction} 
+					selectedToken = {selectedToken}
+					setSelectedToken = {setSelectedToken}
+					sanityTokens = {sanityTokens}
+					walletAddress = {walletAddress}
+					thirdwebTokens = {thirdwebTokens}/>
 			default:
-				return <h2>Send</h2>
+				return <h2>Sended</h2>
 		}
 	}
 
@@ -33,14 +39,18 @@ const TransferModal = ({
 					text-lg font-semibold hover:cursor-pointer hover:bg-[#111213]
 					${action === "send" ? "text-[#3773f4]" : "border border-[#282b2e]"}`}
 					onClick={() => setAction("send")}>
-						<p className="">Send</p>
+						<p className="">
+							Send
+						</p>
 				</div>
 				
 				<div className={`Option h-full w-full grid place-items-center
 					text-lg font-semibold hover:cursor-pointer hover:bg-[#111213]
 					${action === "receive" ? "text-[#3773f4]" : "border border-[#282b2e]"}`}
 					onClick={() => setAction("receive")}>
-						<p className="">Receive</p>
+						<p className="">
+							Receive
+						</p>
 				</div>
 			</div>
 

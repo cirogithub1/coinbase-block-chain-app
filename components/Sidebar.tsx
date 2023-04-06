@@ -8,7 +8,7 @@ const Sidebar = () => {
 	return (
 		<div className="Wrapper border-r-gray-500 pt-0 pl-2">
 			<div className="LogoContainer mt-3">
-				<div className="Logo ">
+				<div className="Logo">
 					<Image width={80} height={80} src={coinbaseLogo} alt={'cb-logo.png'} />
 				</div>
 			</div>

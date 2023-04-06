@@ -2,6 +2,7 @@ import Modal from 'react-modal'
 import { useRouter } from 'next/router'
 import TransferModal from './modal/TransferModal'
 import Link from 'next/link'
+import Spinner from './Spinner'
 
 Modal.setAppElement('#__next')
 
@@ -68,10 +69,20 @@ const Header = ({
 					isOpen={!!router.query.transfer}
 					onRequestClose={() => router.push('/')}
 					style={customStyles}>
-						<TransferModal 
-							walletAddress={walletAddress} 
-							sanityTokens={sanityTokens}
-							thirdwebTokens={thirdwebTokens} />
+						{thirdwebTokens[0]
+						?
+							<>
+								{!thirdwebTokens[0].toString().includes('Promise') 
+								? 
+									<TransferModal 
+										walletAddress={walletAddress} 
+										sanityTokens={sanityTokens}
+										thirdwebTokens={thirdwebTokens} />
+								: ''
+								}
+							</>
+						: <Spinner size='h-10 w-10'/>
+						}
 				</Modal>
 		</div>
 	)

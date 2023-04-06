@@ -1,8 +1,39 @@
+import { useState, useEffect } from 'react'
+import { ethers } from 'ethers'
+
 import Portfolio from "./Portfolio"
 import Leyends from './Leyends'
 import BalanceChart from './BalanceChart'
 
-const Main = ({ walletAddress, sanityTokens, thirdwebTokens }:{ walletAddress:any, sanityTokens:any, thirdwebTokens:any }) => {
+const Main = ({ walletAddress, sanityTokens, thirdwebTokens }:{ walletAddress:any, sanityTokens:any, thirdwebTokens:any }) => 
+{
+	const [totalTokensBalance, setTotalTokensBalance ] = useState(0)
+	
+	useEffect(() => {
+		const tokensToUSD:any = []
+
+		for (const token of sanityTokens) {
+			// console.log('/Main sanityTokens =', token)
+			tokensToUSD[token.contractAddress] = Number(token.usdPrice)
+		}
+
+		async function calculateBalance() {
+			let total = 0
+				// console.log('/Main thirdwebTokens =', thirdwebTokens)
+				for (const token of thirdwebTokens) {
+	
+					const balance_hex = await token.call("balanceOf", walletAddress)
+					const tokenAddress = token.contractWrapper.readContract.address
+					const balance_str = ethers.utils.formatUnits(balance_hex)	
+					total += Number(balance_str) * (tokensToUSD[tokenAddress])
+				}
+
+			// console.log('/Main total =', total)
+			setTotalTokensBalance(Math.round(total))
+		}
+		calculateBalance()
+		
+	}, [sanityTokens, thirdwebTokens, walletAddress])
 
 	return (
 		<div className="Wrapper px-4 
@@ -15,7 +46,7 @@ const Main = ({ walletAddress, sanityTokens, thirdwebTokens }:{ walletAddress:an
 							</div>
 
 							<div className="BalanceValue text-xl font-bold ">
-								$46.000
+								{totalTokensBalance ? totalTokensBalance : "Loading ..."}
 							</div>
 						</div>
 

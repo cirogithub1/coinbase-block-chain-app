@@ -1,54 +1,65 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { useContract, useBalance, useTransferToken, Web3Button  } from "@thirdweb-dev/react"
+import { useContract, useBalance, useTransferToken } from "@thirdweb-dev/react"
+import { ThirdwebSDK } from "@thirdweb-dev/sdk"
+// import { ethers } from 'ethers'
 
 import { FaWallet } from 'react-icons/fa'
 import imageUrlBuilder from '@sanity/image-url'
 import { client } from '../../lib/sanity'
 import Spinner from '../Spinner'
 
+const sdk = new ThirdwebSDK("ethereum")
+
 const Transfer = ({ 
-	selectedToken, setAction,
-	thirdwebTokens,
-	walletAddress } : { selectedToken:any, setAction:any, thirdwebTokens:any, walletAddress:any }) => 
+	selectedToken, 
+	setAction,
+	walletAddress } : { 
+		selectedToken:any, 
+		setAction:any,
+		walletAddress:any }) => 
 {
 	const [amount, setAmount] = useState(0)
-	const [recipient, setRecipient] = useState('0x...')
+	const [recipient, setRecipient] = useState('')
 	const [imageUrl, setImageUrl] = useState<any>()
-	const [activeThirdwebToken, setActiveThirdwebToken] = useState()
-	// const [balance, setBalance] = useState('fetching...')
+	
+	const { 
+		contract: contractToken, 
+		error: errorContract }:any = useContract(selectedToken.contractAddress)
+	if (errorContract) console.error("from errorContract =" , errorContract)
 
-	const { contract: contractToken }:any = useContract(selectedToken.contractAddress)
+	// useBalance just read a value from a specific token, no ABI needed
+	const {
+		data: tokenBalance, 
+		isLoading: isBalanceLoading, 
+		error: errorBalance}	= useBalance (selectedToken.contractAddress)
+	if (errorBalance) { 
+		console.error("from useBalance =", errorBalance) 
+	}	else if (isBalanceLoading) console.log("tokenBalance Loading...") 
 
-	const {data: balance , isLoading: isBalanceLoading, error: errorBalance}	= useBalance (selectedToken.contractAddress)
-	if (errorBalance) { console.error(errorBalance) } 
-		else { 
-			if (isBalanceLoading) {console.log("Balance Loading...")} 
-				else {
-					if (balance) console.log('balance', balance.displayValue)	 }
+	const { 
+		mutate: transferTokens, 
+		isLoading:isTransfering, 
+		error:errorTransfer } = useTransferToken(contractToken)
+	if (errorTransfer) { 
+		console.error("from useTransferToken =", errorTransfer) 
+	} else if (isTransfering) console.log("TransferHook Loading...") 
+
+	async function sendCoins(amount:any, to:any) {
+		try {
+			// recipient: wallet1 0x4d48bCA56270bA8b60446A552558853eA4e9e5d8 
+			// wallet2 0x781e919DB1e055C1672E2C6067fE8adBD5db1e50 or 
+			// token2 0xb6Bdf1D73A05E7b1CA4D90CfDCc5B3b605935A7B
+			transferTokens({
+				to: to, // Address to transfer to
+				amount: amount, // Amount to transfer
+			})
+			
+		} catch (error) {
+			console.error("sendCoins error =", error)
+			throw new Error("Trying send coins")
 		}
-		
-	const { mutate: transferTokens, isLoading:isTransfering, error:errorTransfer } = useTransferToken(contractToken)
-	if (errorTransfer) { console.error(errorTransfer) } 
-		else { 
-			if (isTransfering) {console.log("TransferHook Loading...")} 
-				else {
-					if (transferTokens) console.log('transferTokens', transferTokens)
-				}
-		}
-
-	// useEffect(() => {
-	// 	const activeThirdToken = thirdwebTokens.find(
-	// 		(token:any) => token.address === selectedToken.contractAddress
-	// 	) 
-	// 	setActiveThirdwebToken(activeThirdToken)
-	// }, [selectedToken, thirdwebTokens])
-
-	async function sendCoins() {
-		const send = await transferTokens({
-			to: recipient, // Address to transfer to
-			amount: amount, // Amount to transfer
-		})
+		setAction("")
 	} 
 
 	useEffect(() => {
@@ -56,17 +67,6 @@ const Transfer = ({
 
 		setImageUrl(url)
 	}, [selectedToken])
-
-	// useEffect(() => {
-	// 	async function getBalance() {
-	// 		if (activeThirdwebToken) {
-	// 			const balance = await activeThirdwebToken.balanceOf(walletAddress)
-	// 			setBalance(balance)				
-	// 		}
-	// 	}
-
-	// 	if (activeThirdwebToken) getBalance()
-	// }, [activeThirdwebToken, walletAddress, balance])
 
 	return (
 		<div className="Wrapper flex flex-col h-full flex-1 ">
@@ -81,12 +81,12 @@ const Transfer = ({
 						onChange={(e) => setAmount(+e.target.value)}/>
 
 						<span className="text-3xl text-[#3773f4] pb-2">
-							ETH
+						{selectedToken.symbol}
 						</span>
 				</div>
 				
 				<div className={`Warning pl-1rem pb-2rem] text-center 
-					${amount > 0 ? "text-[#0a0b0e]" : "text-gray-500"}  `}>
+					${amount > 0 ? "text-[#0a0b0e]" : "text-red-500"}  `}>
 					Amount is required
 				</div>
 			</div>
@@ -109,7 +109,7 @@ const Transfer = ({
 					<div>
 						<input className="Recipient border-none bg-transparent 
 							outline-none text-white text-lg pr-2 w-full truncate"
-							placeholder='Address'
+							placeholder='Address required'
 							value={recipient}
 							onChange={(e) => setRecipient(e.target.value)}
 						/>
@@ -126,7 +126,9 @@ const Transfer = ({
 						</div>
 						
 						<div>
-							<div className="CoinSelectList flex flex-[1.3] h-full hover:cursor-pointer">
+							<div 
+								className="CoinSelectList flex flex-[1.3] h-full hover:cursor-pointer"
+								onClick={() => setAction('select')}>
 								<div className="Icon h-8 w-8 grid mr-2 rounded-full 
 									place-items-center">
 									{imageUrl
@@ -151,21 +153,15 @@ const Transfer = ({
 
 			</div>
 
-			<Web3Button contractAddress={contractToken}	action={() =>
-					transferTokens({
-						to: recipient, // Address to transfer to
-						amount: amount, // Amount to transfer
-					})
-				}
-	    >
-				Transfer
-			</Web3Button>
-			
 			<div className="Row flex items-center justify-between 
 				text-gray-500 pt-4 text-lg">
-				<button className="Continue text-white w-full bg-blue-500 p-2
+				<button className={`Continue text-white w-full p-2 
 					text-center rounded-lg text-lg hover:cursor-pointer 
-					hover:bg-blue-600">
+					${amount && recipient 
+						? "bg-blue-500 hover:bg-blue-600" 
+						: "bg-gray-500 hover:cursor-not-allowed"} `}
+					disabled={(recipient && amount) ? false : true}
+					onClick={() => sendCoins(amount, recipient)}>
 						Continue
 				</button>
 			</div>
@@ -176,7 +172,13 @@ const Transfer = ({
 					{selectedToken.symbol} Balance
 				</div>
 
-				<div className="Balance">{balance ? balance.displayValue : <Spinner size={"h-4 w-4"}/>} {selectedToken.symbol}</div>
+				<div className="Balance">
+					{tokenBalance 
+					? (tokenBalance.displayValue).slice(0,5) 
+					: <Spinner size={"h-3 w-3"}/>}
+					
+					{` ${selectedToken.symbol}`}
+				</div>
 			</div>
 		</div>
 	)

@@ -1,8 +1,6 @@
-import { ethers } from 'ethers'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { coins } from '../static/coins'
-import BalanceHook from './BalanceHook'
 import Coin from './Coin' 
 import Spinner from './Spinner'
 
@@ -13,14 +11,6 @@ const Portfolio = ({
 } : {	walletAddress:any, sanityTokens:any, thirdWebTokens:any }
 ) => {
 
-	const [walletBalance, setWalletBalance] = useState(0)
-
-	const tokenToUSD:any = []
-
-	for (const token of sanityTokens) {
-		tokenToUSD[token.contractAddress] = Number(token.usdPrice)
-	}
-	
 	return (
 		<div className="Wrapper min-w-fit]">
 			<div className="Content pt-4 pl-2">
@@ -28,7 +18,7 @@ const Portfolio = ({
 					rounded-lg">
 					<div className="TableItem p-4" >
 						<div className="Title text-2xl font-semibold ">
-							Your Assets
+							Your Portfolio
 						</div>	
 					</div>
 
