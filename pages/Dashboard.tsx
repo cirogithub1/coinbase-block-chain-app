@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react'
 
 // import { ThirdwebSDK } from "@thirdweb-dev/sdk/evm"
 import { ThirdwebSDK } from "@thirdweb-dev/sdk"
-import ethers from "ethers"
+// import ethers from "ethers"
 
 import Header from "@/components/Header"
 import Main from "@/components/Main"
 import Sidebar from "@/components/Sidebar"
 import Spinner from '@/components/Spinner'
-import { log } from 'util'
 
 const sanityAdd = `https://j2y3h3rg.api.sanity.io/v2021-10-21/data/query/production?`
 const query = `query=*%5B_type%20%3D%3D%20'coins'%5D%20%7B%0A%20%20name%2C%0A%20%20contractAddress%2C%0A%20%20usdPrice%2C%0A%20%20logo%2C%0A%20%20symbol%0A%7D%0A`
