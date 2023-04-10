@@ -52,8 +52,17 @@ const Header = ({
 							className="WallerTitle text-[#27ad74] font-semibold hover:cursor-pointer">
 								MyWallet</div>
 
-						<div className="WalletAddress text-xs text-gray-500">
-							{walletAddress.slice(0,5)}...</div>
+						<>
+							{walletAddress
+							?
+								<div className="WalletAddress text-xs text-gray-500">
+									{walletAddress.slice(0,5)}...</div>
+							:
+								<div className="Spinner">
+									<Spinner size="h-32 w-32" /></div>
+							}
+						</>
+
 				</div>
 
 				<div className="ButtonContainer flex space-x-2">
