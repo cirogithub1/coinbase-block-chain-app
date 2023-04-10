@@ -1,0 +1,29 @@
+
+.disconnectDiv {
+	animation: disconnectDiv ease-in-out 1s;
+}
+
+.disconnectBut {
+	animation: disconnectBut 1s;
+}
+
+@keyframes disconnectDiv {
+	0% {
+		transform: translateX(70%);
+	}
+
+	100% {
+		transform: translateX(0%);
+	}
+}
+
+@keyframes disconnectBut {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(-719deg);
+	}
+}
+

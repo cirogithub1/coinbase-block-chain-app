@@ -59,7 +59,7 @@ const Main = ({ walletAddress, sanityTokens, thirdwebTokens }:{ walletAddress:an
 				</div>
 
 				<div className="col-span-2 m-3">
-					<Portfolio walletAddress={walletAddress} sanityTokens={sanityTokens} thirdWebTokens={thirdwebTokens}/>
+					<Portfolio />
 				</div>
 
 		</div>

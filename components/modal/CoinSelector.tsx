@@ -18,6 +18,7 @@ const CoinSelector = ({
 	walletAddress:any
 	}) => 
 {
+	
 	return (
 		<div className='Wrapper'>
 			<div className="Title w-full text-center text-2xl mb-4">Select Asset</div>

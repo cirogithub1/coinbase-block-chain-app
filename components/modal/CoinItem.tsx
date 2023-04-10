@@ -28,7 +28,7 @@ const CoinItem = ({
 
 	useEffect(() => {
 		async function getBalance() {
-			let activeThirweb
+			// let activeThirweb
 			for (const token of thirdwebTokens) {
 				if (token.contractWrapper.readContract.address === sanityToken.contractAddress) {
 					const balance_hex = await token.call("balanceOf", walletAddress)
@@ -56,28 +56,27 @@ const CoinItem = ({
 				setSelectedToken(sanityToken)
 				setAction('send')
 			}}>
-			<div className="Main items-center justify-center flex">
+			<div className="Main flex items-center justify-center">
 				<div className="Icon mr-4 h-7 w-7 rounded-xl overflow-hidden 
 					place-items-center">
 					<div className='Image w-full h-full justify-center'>
 						{imageUrl
-						? <Image width={28} height={28} src={imageUrl} alt={imageUrl} />
+						? <Image 
+								width={28} 
+								height={28} 
+								src={imageUrl} 
+								alt={imageUrl} />
 						: <FaCheck />
-						}
-					</div>
+						}</div>
 				</div>
 
 				<div className="NameDetails">
-					<div className="Name text-base ml-0 mb-0 mr-2">
+					<div className="CoinName text-base ml-0 mb-0 mr-2">
 						{sanityToken.name}</div>
 
 					<div className="Symbol text-gray-400 text-xs">
 						{sanityToken.symbol}</div>
 				</div>
-
-				<div className="NameDetails">
-				</div>
-
 			</div>
 
 			<div className="Balance flex">
@@ -86,8 +85,7 @@ const CoinItem = ({
 		
 			{selectedToken.name === sanityToken.name &&
 				<div className="IsSelected ml-1 mt-1 text-green-600">
-					<FaCheck />
-				</div>
+					<FaCheck /></div>
 			}
 			</div>
 			

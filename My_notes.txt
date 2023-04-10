@@ -38,5 +38,12 @@ Build Coinbase Blockchain Web 3.0 App with Next.js | Sanity.io | thirdweb
 
 	03:13:23 npm i @sanity/image-url
 
-	03:42:16 mark
+	03:45:56 	npm i react-loader-spinner --save
+						import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 
+	03:52:21	Button receive
+
+	03:57:00 	QR code generator
+						Add the protocol, hostname, port, and pathname to the images.remotePatterns config in next.config.js 
+
+	04:05:32	Deploy the app at vercel.com

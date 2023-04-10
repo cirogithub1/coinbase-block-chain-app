@@ -1,15 +1,10 @@
-import { useState } from 'react'
+
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { coins } from '../static/coins'
 import Coin from './Coin' 
 import Spinner from './Spinner'
 
-const Portfolio = ({
-	walletAddress, 
-	sanityTokens,	
-	thirdWebTokens 
-} : {	walletAddress:any, sanityTokens:any, thirdWebTokens:any }
-) => {
+const Portfolio = () => {
 
 	return (
 		<div className="Wrapper min-w-fit]">
